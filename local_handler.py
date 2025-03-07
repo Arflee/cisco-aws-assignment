@@ -1,3 +1,4 @@
+import os
 import boto3
 import json
 from dotenv import load_dotenv, dotenv_values 
@@ -8,7 +9,7 @@ sqs = boto3.client('sqs')
 
 def receive_messages():
     response = sqs.receive_message(
-        QueueUrl=SQS_QUEUE_URL,
+        QueueUrl=os.getenv("SQS_QUEUE_URL"),
         MaxNumberOfMessages=5,  # Adjust based on your needs
         WaitTimeSeconds=10  # Long polling for better efficiency
     )
@@ -20,7 +21,7 @@ def receive_messages():
 
             # Delete the message after processing
             sqs.delete_message(
-                QueueUrl=SQS_QUEUE_URL,
+                QueueUrl=os.getenv("SQS_QUEUE_URL"),
                 ReceiptHandle=message['ReceiptHandle']
             )
             print("Message deleted.\n")
