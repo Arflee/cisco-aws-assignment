@@ -1,4 +1,5 @@
 import json
+import os
 import boto3
 
 def find(parent, node):
@@ -36,32 +37,27 @@ def kruskal_mst(edges, num_nodes):
     return total_cost, mst
 
 def lambda_handler(event, context):
-    s3 = boto3.client('s3')
-    sqs = boto3.client('sqs')
-    
     bucket_name = event['Records'][0]['s3']['bucket']['name']
     file_key = event['Records'][0]['s3']['object']['key']
     s3_path = f"s3://{bucket_name}/{file_key}"
     
+    s3 = boto3.client('s3')
     response = s3.get_object(Bucket=bucket_name, Key=file_key)
     file_content = response['Body'].read().decode('utf-8')
     lines = file_content.strip().split('\n')
     
     num_nodes = int(lines[0])
     edges = [tuple(map(int, line.split())) for line in lines[1:]]
-    
+
     total_cost, mst = kruskal_mst(edges, num_nodes)
-    
     output_data = {
         "total_cost": total_cost,
         "connections": mst,
         "s3_file_path": s3_path
     }
     
-    sqs_queue_url = "https://sqs.YOUR_REGION.amazonaws.com/YOUR_ACCOUNT_ID/output-queue"
+    sqs = boto3.client('sqs')
+    sqs_queue_url = os.getenv("SQS_QUEUE_URL")
     sqs.send_message(QueueUrl=sqs_queue_url, MessageBody=json.dumps(output_data))
-    
-    return {
-        'statusCode': 200,
-        'body': json.dumps("Processing Complete.")
-    }
+
+    return output_data

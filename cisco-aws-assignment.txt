@@ -1,0 +1,68 @@
+Testing Assignment: AWS Lambda Function for Network Optimization
+
+Objective: Create an AWS Lambda function triggered by a new file upload to an S3 bucket to optimize network connections and send the result to an SQS queue.
+
+Assignment Details:
+
+Setup:
+
+Prepare an S3 bucket where files containing network connection data can be uploaded.
+Prepare an SQS queue (output-queue) to receive the results of the network optimization.
+Note: Infrastructure can be set up manually. Providing Terraform scripts is a bonus.
+Task:
+
+Write an AWS Lambda function in any supported language (e.g., Python, JavaScript/Node.js, Java, C#, Ruby) that:
+Is triggered by the event of a new file being uploaded to the S3 bucket.
+Reads the uploaded file, which contains a list of potential connections between nodes, each with a cost, formatted as:
+First line: {num nodes}
+Subsequent lines: {node1} {node2} {cost}
+Processes the data to determine the optimal set of connections that minimizes the total connection cost while ensuring all nodes are connected.
+Sends the result, including the total cost of the optimal connections, the connections themselves, and the S3 file path, to the output-queue.
+Processing Requirement:
+
+Implement an algorithm to find the set of connections that minimizes total cost while connecting all nodes.
+
+Submission:
+
+Submit the code for the Lambda function in the chosen language, including the network optimization algorithm.
+Include documentation explaining the architecture, setup process, and instructions to run and test the solution.
+Optionally, provide Terraform scripts to automate the setup of AWS resources as a bonus.
+
+Evaluation Criteria:
+
+Technical Skills: Proficiency in the chosen programming language and AWS Lambda.
+Algorithmic Thinking: Ability to implement and explain the network optimization algorithm.
+Code Quality: Readability, structure, thorough testing and documentation.
+Solution testing: Provide set of unit tests that verify functionality of the code. 
+AWS Best Practices: Effective use of AWS services and configurations.
+Error Handling and Logging: Robust implementation of error handling and logging mechanisms.
+
+Example Scenario:
+
+1. File Upload to S3:
+
+File content:
+4
+1 2 3
+2 3 1
+3 4 4
+1 4 2
+
+2. Output to output-queue: The total cost, connections, and S3 file path, e.g.,
+
+{
+  "total_cost": 6,
+  "connections": [
+    {"from": 2, "to": 3, "cost": 1},
+    {"from": 1, "to": 4, "cost": 2},
+    {"from": 1, "to": 2, "cost": 3}
+  ],
+  "s3_file_path": "s3://bucket-name/network-data.txt"
+}
+
+
+Materials:
+https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+https://docs.aws.amazon.com/lambda/latest/dg/getting-started.html
+https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html
+https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-setting-up.html
