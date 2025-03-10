@@ -27,7 +27,7 @@
                "arn":"arn:aws:s3:::amzn-s3-demo-bucket"
             },
             "object":{  
-               "key":"HappyFace.jpg",
+               "key":"pass1.txt",
                "size":1024,
                "eTag":"d41d8cd98f00b204e9800998ecf8427e",
                "versionId":"096fKKXTRTtl3on89fVO.nfljtsv6qko",

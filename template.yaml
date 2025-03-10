@@ -9,7 +9,7 @@ Resources:
       BucketName: network-input-bucket
 
   NetworkLambda:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/
       Handler: app.lambda_handler
@@ -17,6 +17,9 @@ Resources:
       Timeout: 10
       Role: !GetAtt LambdaExecutionRole.Arn
       FunctionName: networkComputationLambda
+      Environment:
+        Variables:
+          SQSURL: !Ref SQSOutput
       Events:
         FileUpload:
           Type: S3
