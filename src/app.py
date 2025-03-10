@@ -37,7 +37,9 @@ def kruskal_mst(edges, num_nodes):
     return total_cost, mst
 
 def lambda_handler(event, context):
+    # todo separate func
     bucket_name = event['Records'][0]['s3']['bucket']['name']
+    # todo separate func
     file_key = event['Records'][0]['s3']['object']['key']
     s3_path = f"s3://{bucket_name}/{file_key}"
     
@@ -47,6 +49,7 @@ def lambda_handler(event, context):
     lines = file_content.strip().split('\n')
     
     num_nodes = int(lines[0])
+    #todo check for lines and nodes amount
     edges = [tuple(map(int, line.split())) for line in lines[1:]]
 
     total_cost, mst = kruskal_mst(edges, num_nodes)
@@ -57,7 +60,7 @@ def lambda_handler(event, context):
     }
     
     sqs = boto3.client('sqs')
-    sqs_queue_url = os.getenv("SQS_QUEUE_URL")
+    sqs_queue_url = "https://sqs.eu-north-1.amazonaws.com/337909778223/networkComputationOutput"
     sqs.send_message(QueueUrl=sqs_queue_url, MessageBody=json.dumps(output_data))
 
     return output_data

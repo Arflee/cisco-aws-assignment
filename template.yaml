@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+
+  NetworkInputBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: network-input-bucket
+
+  NetworkLambda:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Timeout: 10
+      Role: !GetAtt LambdaExecutionRole.Arn
+      FunctionName: networkComputationLambda
+      Events:
+        FileUpload:
+          Type: S3
+          Properties:
+            Bucket: !Ref NetworkInputBucket
+            Events: s3:ObjectCreated:*
+
+  SQSOutput: 
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: networkComputationOutput
+      VisibilityTimeout: 120
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 
+                - lambda.amazonaws.com
+            Action: 
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: SQSSendMessagePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - sqs:SendMessage
+                Resource: !GetAtt SQSOutput.Arn
+        - PolicyName: S3ReadPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - s3:GetObject
+                Resource: !Sub "arn:aws:s3:::network-input-bucket/*"
