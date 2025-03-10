@@ -51,6 +51,7 @@ Resources:
                 Action: 
                   - sqs:SendMessage
                 Resource: !GetAtt SQSOutput.Arn
+                
         - PolicyName: S3ReadPolicy
           PolicyDocument:
             Version: "2012-10-17"
@@ -59,3 +60,14 @@ Resources:
                 Action: 
                   - s3:GetObject
                 Resource: !Sub "arn:aws:s3:::network-input-bucket/*"
+
+        - PolicyName: CloudWatchLoggingPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
