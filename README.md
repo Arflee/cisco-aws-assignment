@@ -17,8 +17,7 @@ Directory Structure:
         └── unit
 ```
 
-- **src** - Code for the application's Lambda function.
-- **events** - Invocation events that you can use to invoke the lambda function locally.
+- **src** - Code for the application's Lambda function. *app.py* file contains Lambda function for AWS and simple logic for getting file information from S3 bucket. *network_analyzer.py* contains Kruskal's algorithm implementation for finding cheapest route through every node in a graph.
 - **tests** - Unit tests for the application code.
 - **mock** - Contains different txt files to check pipeline on unusual inputs. You can upload these files in S3 bucket that was deployed and check the whole flow process from S3 bucket to Lambda function to SQS output.
 - **template.yaml** - A template that defines the application's AWS resources.
