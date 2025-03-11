@@ -1,6 +1,9 @@
 def find(parent, node):
+    # If the node is not its own parent, it's not the root.
     if parent[node] != node:
+        # Recursively find the root of node's parent and update parent[node] to point directly to the root.
         parent[node] = find(parent, parent[node])
+    # Return the representative (root) of this node.
     return parent[node]
 
 def union(parent, rank, node1, node2):

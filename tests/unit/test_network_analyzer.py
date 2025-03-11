@@ -13,6 +13,17 @@ def test_union_find():
     network_analyzer.union(parent, rank, 2, 3)
     assert network_analyzer.find(parent, 1) == network_analyzer.find(parent, 3), "1 and 3 should be in the same set"
 
+def assertEdgeLength(mst, expected_edges):
+    assert len(mst) == len(expected_edges), "MST should have" + str(len(expected_edges)) + " edges"
+    for edge in expected_edges:
+        assert edge in mst, f"Expected edge {edge} not found in MST"
+
+def assertCost(edges, expected_cost):
+    total_cost, mst = network_analyzer.kruskal_mst(edges, num_nodes=5)
+    
+    assert total_cost == expected_cost, "Total cost should be " + str(expected_cost) + " for the MST"
+    return mst
+
 def test_kruskal_mst1():
     edges = [
         (1, 2, 1),
@@ -24,10 +35,8 @@ def test_kruskal_mst1():
     
     # Running Kruskal's algorithm should yield an MST with total cost 7:
     # Expected MST edges: (1,2,1), (2,3,2), (3,4,4)
-    total_cost, mst = network_analyzer.kruskal_mst(edges, num_nodes=5)
-    
-    assert total_cost == 7, "Total cost should be 7 for the MST"
-    
+    mst = assertCost(edges, expected_cost=7)
+        
     # Expected edges in the MST (order doesn't matter)
     expected_edges = [
         {"from": 1, "to": 2, "cost": 1},
@@ -35,9 +44,7 @@ def test_kruskal_mst1():
         {"from": 3, "to": 4, "cost": 4}
     ]
     
-    assert len(mst) == len(expected_edges), "MST should have three edges"
-    for edge in expected_edges:
-        assert edge in mst, f"Expected edge {edge} not found in MST"
+    assertEdgeLength(mst, expected_edges)
 
 def test_kruskal_mst2():
     edges = [
@@ -47,16 +54,12 @@ def test_kruskal_mst2():
         (1, 4, 2)
     ]
     
-    total_cost, mst = network_analyzer.kruskal_mst(edges, num_nodes=4)
-    
-    assert total_cost == 6, "Total cost should be 6 for the MST"
-    
+    mst = assertCost(edges, expected_cost=6)
+        
     expected_edges = [
         {"from": 1, "to": 2, "cost": 3},
         {"from": 2, "to": 3, "cost": 1},
         {"from": 1, "to": 4, "cost": 2}
     ]
     
-    assert len(mst) == len(expected_edges), "MST should have three edges"
-    for edge in expected_edges:
-        assert edge in mst, f"Expected edge {edge} not found in MST"
+    assertEdgeLength(mst, expected_edges)
