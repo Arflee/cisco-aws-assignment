@@ -26,8 +26,9 @@ The Serverless Application Model Command Line Interface (SAM CLI) is an extensio
 
 To use the SAM CLI, you need the following tools.
 
+- AWS CLI - [Install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
-- [Python 3 installed](https://www.python.org/downloads/)
+- [Python 3 installed](https://www.python.org/downloads/)  
 To build and deploy your application for the first time, run the following in your shell:
 
 ```bash
