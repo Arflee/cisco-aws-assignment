@@ -14,7 +14,7 @@ Resources:
       CodeUri: src/
       Handler: app.lambda_handler
       Runtime: python3.12
-      Timeout: 10
+      Timeout: 30
       Role: !GetAtt LambdaExecutionRole.Arn
       FunctionName: networkComputationLambda
       Environment:
