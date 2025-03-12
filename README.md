@@ -6,7 +6,6 @@ This project contains source code and supporting files for a serverless applicat
 
 ```bash
 └── ./
-    ├── events
     ├── src
     │   ├── app.py
     │   └── network_analyzer.py
